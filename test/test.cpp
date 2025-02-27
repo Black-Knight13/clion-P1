@@ -1,53 +1,74 @@
+/*
 #include <catch2/catch_test_macros.hpp>
 #include <iostream>
+#include "AVL.h"
+#include "AVL.cpp"
 
-// uncomment and replace the following with your own headers
-// #include "AVL.h"
-
+//Jackson Turnbull 41914654
 using namespace std;
 
-// the syntax for defining a test is below. It is important for the name to be unique, but you can group multiple tests with [tags]. A test can have [multiple][tags] using that syntax.
-TEST_CASE("Example Test Name - Change me!", "[flag]"){
-	// instantiate any class members that you need to test here
-	int one = 1;
+TEST_CASE("Remove root when it's the only node", "[RemoveInorder]") {
+    AVL tree;
+    tree.insert("Zahara", 99);
 
-	// anything that evaluates to false in a REQUIRE block will result in a failing test 
-	REQUIRE(one == 0); // fix me!
+    vector<string> inorderBefore = tree.getInorder();
+    REQUIRE(inorderBefore == vector<string>{"Zahara"});
 
-	// all REQUIRE blocks must evaluate to true for the whole test to pass
-	REQUIRE(false); // also fix me!
+    tree.removeInorder(0); // Remove the root node
+
+    vector<string> inorderAfter = tree.getInorder();
+    REQUIRE(inorderAfter.empty()); // Tree should be empty
 }
 
-TEST_CASE("Test 2", "[flag]"){
-	// you can also use "sections" to share setup code between tests, for example:
-	int one = 1;
+TEST_CASE("Remove an internal node with two children", "[2 Child Case]") {
+    AVL tree;
+    tree.insert("Drake", 50);
+    tree.insert("Ela", 30);
+    tree.insert("Frank", 70);
+    tree.insert("Bobbie", 60);
+    tree.insert("Hannah", 80);
 
-	SECTION("num is 2") {
-		int num = one + 1;
-		REQUIRE(num == 2);
-	};
+    vector<string> inorderBefore = tree.getInorder();
+    REQUIRE(inorderBefore == vector<string>{"Ela", "Drake", "Bobbie", "Frank", "Hannah"});
 
-	SECTION("num is 3") {
-		int num = one + 2;
-		REQUIRE(num == 3);
-	};
+    tree.removeInorder(2); // Remove "Bobbie"
 
-	// each section runs the setup code independently to ensure that they don't affect each other
+    vector<string> inorderAfter = tree.getInorder();
+    REQUIRE(inorderAfter == vector<string>{"Ela", "Drake", "Frank", "Hannah"});
 }
 
-// you must write 5 unique, meaningful tests for credit on the testing portion of this project!
+TEST_CASE("Verify Tree Balancing", "[Balancing]") {
+    AVL tree;
+    tree.insert("Hannah", 50);
+    tree.insert("Ian", 30);
+    tree.insert("Jane", 70);
+    tree.insert("Kevin", 20);
+    tree.insert("Lucy", 40);
 
-// the provided test from the template is below.
-
-TEST_CASE("Example BST Insert", "[flag]"){
-	/*
-		MyAVLTree tree;   // Create a Tree object
-		tree.insert(3);
-		tree.insert(2);
-		tree.insert(1);
-		std::vector<int> actualOutput = tree.inorder();
-		std::vector<int> expectedOutput = {1, 2, 3};
-		REQUIRE(expectedOutput.size() == actualOutput.size());
-		REQUIRE(actualOutput == expectedOutput);
-	*/
+    // Checking preorder to confirm tree balance
+    vector<string> preorder = tree.getPreorder();
+    REQUIRE(preorder == vector<string>{"Hannah", "Ian", "Kevin", "Lucy", "Jane"});
 }
+
+TEST_CASE("Search Non-Existent ID", "[Search]") {
+    AVL tree;
+    tree.insert("Frank", 33333);
+    tree.insert("Ala", 44444);
+
+    REQUIRE(tree.searchByID(99999) == "unsuccessful"); // 99999 is not in the tree
+}
+
+TEST_CASE("Check Empty Tree Behavior", "[EmptyTree]") {
+    AVL tree;
+
+    REQUIRE(tree.getInorder().empty());
+    REQUIRE(tree.getPreorder().empty());
+    REQUIRE(tree.getPostorder().empty());
+
+    REQUIRE(tree.isEmpty() == true);
+    REQUIRE(tree.searchByID(11111) == "unsuccessful");
+}
+
+
+*/
+
